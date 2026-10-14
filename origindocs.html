@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OriginDocs — Supplier HS Intake & Validation</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f8f7;color:#1a1a18;min-height:100vh;padding:2rem 1rem}
+.app{max-width:680px;margin:0 auto}
+.header{margin-bottom:2rem}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:0.5rem}
+.logo-mark{width:32px;height:32px;background:#dbeafe;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-mark i{font-size:17px;color:#1d4ed8}
+.logo-text{font-size:16px;font-weight:600;color:#1a1a18;letter-spacing:-0.3px}
+.logo-sub{font-size:11px;color:#888;font-family:ui-monospace,monospace;letter-spacing:0.5px;text-transform:uppercase}
+.tagline{font-size:13px;color:#555;margin-top:0.5rem;line-height:1.5}
+.step-bar{display:flex;border:1px solid #e2e2df;border-radius:8px;overflow:hidden;margin-bottom:1.5rem}
+.step{flex:1;padding:9px 12px;font-size:12px;color:#999;display:flex;align-items:center;gap:6px;border-right:1px solid #e2e2df;background:#f8f8f7}
+.step:last-child{border-right:none}
+.step.active{background:#eff6ff;color:#1d4ed8}
+.step.done{background:#f0fdf4;color:#15803d}
+.step-num{font-family:ui-monospace,monospace;font-size:11px;font-weight:600}
+.card{background:#fff;border:1px solid #e2e2df;border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1rem}
+.card-title{font-size:12px;font-weight:600;color:#888;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:6px}
+.card-title i{font-size:15px}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field-full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:5px}
+.label{font-size:12px;color:#555;font-weight:500}
+.required{color:#dc2626;margin-left:2px}
+input,select,textarea{font-family:inherit;font-size:14px;width:100%;background:#f8f8f7;border:1px solid #d4d4d0;border-radius:7px;color:#1a1a18;transition:border-color 0.15s;padding:7px 10px}
+input{height:36px}
+select{height:36px}
+textarea{resize:vertical;min-height:76px;line-height:1.5}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#3b82f6;background:#fff}
+.hint{font-size:11px;color:#aaa;line-height:1.4}
+.incoterm-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.inco-btn{padding:5px 12px;font-size:12px;border:1px solid #d4d4d0;border-radius:7px;background:#f8f8f7;color:#555;cursor:pointer;transition:all 0.1s;font-family:inherit;font-weight:500}
+.inco-btn:hover{border-color:#3b82f6;color:#1d4ed8}
+.inco-btn.sel{background:#eff6ff;color:#1d4ed8;border-color:#3b82f6}
+.analyze-btn{width:100%;padding:11px;font-size:14px;font-weight:600;background:#1d4ed8;color:#fff;border:none;border-radius:8px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:0.5rem;transition:background 0.15s}
+.analyze-btn:hover{background:#1e40af}
+.analysis-panel{display:none}
+.analysis-panel.visible{display:block}
+.memo-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid #e2e2df}
+.memo-from{font-size:11px;color:#aaa;font-family:ui-monospace,monospace;line-height:1.6}
+.memo-badge{font-size:11px;padding:4px 10px;border-radius:6px;font-family:ui-monospace,monospace;font-weight:700;letter-spacing:0.5px}
+.badge-clear{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+.badge-warn{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+.badge-risk{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+.hs-display{font-family:ui-monospace,monospace;font-size:26px;font-weight:700;color:#1a1a18;margin:0.75rem 0 0.25rem;letter-spacing:2px}
+.hs-desc{font-size:13px;color:#555;margin-bottom:1rem;line-height:1.5}
+.section-label{font-size:11px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;margin-top:1.25rem}
+.rationale-box{background:#f8f8f7;border-left:3px solid #3b82f6;padding:0.75rem 1rem;font-size:13px;color:#444;line-height:1.7}
+.flags-list{display:flex;flex-direction:column;gap:6px}
+.flag{display:flex;align-items:flex-start;gap:8px;font-size:13px;padding:8px 10px;border-radius:7px;line-height:1.5}
+.flag i{margin-top:1px;font-size:15px;flex-shrink:0}
+.flag-warn{background:#fffbeb;color:#92400e}
+.flag-danger{background:#fef2f2;color:#991b1b}
+.flag-ok{background:#f0fdf4;color:#15803d}
+.disambig-q{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#444;padding:8px 10px;background:#f8f8f7;border:1px solid #e2e2df;border-radius:7px;margin-bottom:6px;line-height:1.5}
+.disambig-q i{font-size:14px;flex-shrink:0;margin-top:1px;color:#3b82f6}
+.export-row{display:flex;gap:8px;margin-top:1.25rem}
+.export-btn{flex:1;padding:9px;font-size:13px;border:1px solid #d4d4d0;border-radius:7px;background:#f8f8f7;color:#444;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:500;transition:background 0.1s}
+.export-btn:hover{background:#eff6ff;color:#1d4ed8;border-color:#93c5fd}
+.loading-state{text-align:center;padding:3rem 2rem;display:none;background:#fff;border:1px solid #e2e2df;border-radius:12px}
+.loading-state.visible{display:block}
+.spinner{width:28px;height:28px;border:2px solid #e2e2df;border-top-color:#1d4ed8;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 1rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:13px;color:#888}
+.error-state{display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:7px;padding:0.75rem 1rem;font-size:13px;color:#991b1b;margin-top:0.75rem}
+.error-state.visible{display:block}
+.supplier-assess{background:#fffbeb;border-left:3px solid #f59e0b;padding:0.75rem 1rem;font-size:13px;color:#78350f;line-height:1.7;margin-top:0.5rem}
+@media(max-width:500px){.field-grid{grid-template-columns:1fr}.export-row{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="logo">
+      <div class="logo-mark"><i class="ti ti-file-invoice"></i></div>
+      <div>
+        <div class="logo-text">OriginDocs</div>
+        <div class="logo-sub">Supplier intake · HS validation · v2</div>
+      </div>
+    </div>
+    <div class="tagline">Capture accurate shipment data at the source — before it enters the freight forwarder pipeline.</div>
+  </div>
+
+  <div class="step-bar">
+    <div class="step active" id="s1"><span class="step-num">01</span> Shipment details</div>
+    <div class="step" id="s2"><span class="step-num">02</span> AI classification</div>
+    <div class="step" id="s3"><span class="step-num">03</span> Export</div>
+  </div>
+
+  <div id="formSection">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-building-factory"></i> Supplier & origin</div>
+      <div class="field-grid">
+        <div class="field field-full">
+          <label class="label">Manufacturer / supplier legal name & address<span class="required">*</span></label>
+          <input id="supplier" placeholder="Shenzhen Fastex Manufacturing Co. Ltd., 12 Industrial Rd, Guangdong, China" />
+          <span class="hint">Required for ISF 10+2 and CBP Entry Summary (Form 7501)</span>
+        </div>
+        <div class="field">
+          <label class="label">Country of origin<span class="required">*</span></label>
+          <select id="coo">
+            <option value="">Select country</option>
+            <option>China</option>
+            <option>Mexico</option>
+            <option>Vietnam</option>
+            <option>India</option>
+            <option>Taiwan</option>
+            <option>South Korea</option>
+            <option>Bangladesh</option>
+            <option>Indonesia</option>
+            <option>Thailand</option>
+            <option>Germany</option>
+            <option>Japan</option>
+            <option>Other</option>
+          </select>
+          <span class="hint">Where item was produced — not ship-from country</span>
+        </div>
+        <div class="field">
+          <label class="label">Incoterms (terms of sale)<span class="required">*</span></label>
+          <div class="incoterm-row">
+            <button class="inco-btn" onclick="selInco(this,'FOB')">FOB</button>
+            <button class="inco-btn" onclick="selInco(this,'CIF')">CIF</button>
+            <button class="inco-btn" onclick="selInco(this,'DDP')">DDP</button>
+            <button class="inco-btn" onclick="selInco(this,'EXW')">EXW</button>
+            <button class="inco-btn" onclick="selInco(this,'DAP')">DAP</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="ti ti-package"></i> Product details</div>
+      <div class="field-grid">
+        <div class="field field-full">
+          <label class="label">Detailed item description & material composition<span class="required">*</span></label>
+          <textarea id="description" placeholder="e.g. Cold-rolled stainless steel (grade 304) mounting bracket for HVAC air handler units, powder-coated, 6mm thickness, manufactured via CNC stamping"></textarea>
+          <span class="hint">Generic descriptions trigger CBP holds — include material, grade, and function</span>
+        </div>
+        <div class="field">
+          <label class="label">Supplier's suggested HS code</label>
+          <input id="hsSupplier" placeholder="e.g. 7326.90" maxlength="10" />
+          <span class="hint">Min 6-digit; 10-digit HTSUS preferred</span>
+        </div>
+        <div class="field">
+          <label class="label">Unit quantity<span class="required">*</span></label>
+          <input id="qty" type="number" placeholder="500" min="1" />
+        </div>
+        <div class="field">
+          <label class="label">Net weight (kg)<span class="required">*</span></label>
+          <input id="netWt" type="number" placeholder="125" />
+        </div>
+        <div class="field">
+          <label class="label">Gross weight (kg)</label>
+          <input id="grossWt" type="number" placeholder="140" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="ti ti-currency-dollar"></i> Valuation</div>
+      <div class="field-grid">
+        <div class="field">
+          <label class="label">Unit price<span class="required">*</span></label>
+          <input id="unitPrice" type="number" placeholder="12.50" step="0.01" />
+        </div>
+        <div class="field">
+          <label class="label">Currency</label>
+          <select id="currency">
+            <option>USD</option>
+            <option>CNY</option>
+            <option>EUR</option>
+            <option>MXN</option>
+            <option>INR</option>
+            <option>VND</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div id="errorMsg" class="error-state"></div>
+    <button class="analyze-btn" onclick="runAnalysis()">
+      <i class="ti ti-sparkles"></i> Analyze & classify shipment
+    </button>
+  </div>
+
+  <div class="loading-state" id="loadingState">
+    <div class="spinner"></div>
+    <div class="loading-text">Classifying under HTSUS schedule…</div>
+  </div>
+
+  <div class="analysis-panel" id="analysisPanel">
+    <div class="card">
+      <div class="memo-header">
+        <div>
+          <div class="memo-from">ORIGINDOCS CLASSIFICATION MEMO</div>
+          <div class="memo-from" id="memoDate"></div>
+        </div>
+        <div class="memo-badge" id="riskBadge"></div>
+      </div>
+      <div class="hs-display" id="hsCode">—</div>
+      <div class="hs-desc" id="hsDesc"></div>
+      <div class="section-label">Classification rationale</div>
+      <div class="rationale-box" id="rationale"></div>
+      <div id="supplierAssessSection" style="display:none">
+        <div class="section-label">Supplier code assessment</div>
+        <div class="supplier-assess" id="supplierAssess"></div>
+      </div>
+      <div id="flagsSection">
+        <div class="section-label">Regulatory flags</div>
+        <div class="flags-list" id="flagsList"></div>
+      </div>
+      <div id="disambigSection" style="display:none">
+        <div class="section-label">Information needed for full 10-digit HTSUS</div>
+        <div id="disambigList"></div>
+      </div>
+      <div class="section-label">CBP precedent & references</div>
+      <div class="rationale-box" id="precedent" style="border-left-color:#d4d4d0"></div>
+      <div class="export-row">
+        <button class="export-btn" onclick="exportCSV()"><i class="ti ti-download"></i> Export CSV</button>
+        <button class="export-btn" onclick="copyJSON()"><i class="ti ti-copy"></i> Copy JSON</button>
+        <button class="export-btn" onclick="resetForm()"><i class="ti ti-refresh"></i> New shipment</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedInco = '';
+let analysisResult = null;
+let formData = {};
+
+function selInco(btn, val) {
+  document.querySelectorAll('.inco-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  selectedInco = val;
+}
+
+function getVal(id) { return document.getElementById(id).value.trim(); }
+
+function runAnalysis() {
+  const supplier = getVal('supplier');
+  const coo = getVal('coo');
+  const desc = getVal('description');
+  const qty = getVal('qty');
+  const netWt = getVal('netWt');
+  const unitPrice = getVal('unitPrice');
+  const currency = getVal('currency');
+  const hsSupplier = getVal('hsSupplier');
+  const grossWt = getVal('grossWt');
+  const err = document.getElementById('errorMsg');
+
+  if (!supplier || !coo || !desc || !qty || !netWt || !unitPrice || !selectedInco) {
+    err.textContent = 'Complete all required fields before running classification.';
+    err.classList.add('visible');
+    return;
+  }
+  err.classList.remove('visible');
+  formData = { supplier, coo, desc, qty, netWt, grossWt, unitPrice, currency, inco: selectedInco, hsSupplier };
+
+  document.getElementById('formSection').style.display = 'none';
+  document.getElementById('loadingState').classList.add('visible');
+  document.getElementById('analysisPanel').classList.remove('visible');
+
+  const totalValue = (parseFloat(unitPrice) * parseInt(qty)).toFixed(2);
+  const prompt = `You are a licensed US customs broker with 20 years of experience in HTSUS classification under CBP's Reasonable Care standard.
+
+A foreign supplier has submitted the following shipment data for a US import:
+
+- Supplier: ${supplier}
+- Country of Origin: ${coo}
+- Item Description: ${desc}
+- Quantity: ${qty} units
+- Net Weight: ${netWt} kg${grossWt ? ', Gross Weight: ' + grossWt + ' kg' : ''}
+- Unit Price: ${unitPrice} ${currency} (Total declared value: ${currency} ${totalValue})
+- Incoterms: ${selectedInco}
+${hsSupplier ? '- Supplier suggested HS code: ' + hsSupplier : '- No HS code provided by supplier'}
+
+Provide a professional classification analysis. Respond ONLY with a JSON object (no markdown, no backticks) with this exact structure:
+{
+  "htsus_code": "XXXX.XX.XXXX (use as many digits as confidently determinable, min 6)",
+  "code_description": "official HTSUS schedule description for this heading/subheading",
+  "risk_level": "CLEAR" or "REVIEW" or "HIGH RISK",
+  "rationale": "2-3 sentences explaining which GRI rules and chapter notes were applied and why this heading was chosen over alternatives",
+  "flags": [{"type": "warn" or "danger" or "ok", "text": "flag description"}],
+  "disambiguation_questions": ["question if more info needed to reach full 10-digit, or empty array"],
+  "precedent": "1-2 sentences referencing applicable CBP CROSS rulings or chapter notes with ruling numbers if applicable",
+  "supplier_code_assessment": "brief assessment of supplier suggested HS code if provided, or null"
+}
+
+Keep it concise: rationale max 3 sentences, each flag max 25 words, at most 6 flags, at most 4 questions, precedent max 2 sentences, supplier_code_assessment max 3 sentences.
+
+Flags must cover: Section 301 tariff status for China-origin goods, UFLPA exposure if relevant, AD/CVD duty exposure, PGA filing requirements (FDA, EPA, TSCA), and country-of-origin documentation. Include an ok flag when something is explicitly clear.`;
+
+  fetch('/api', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 4000, messages: [{ role: 'user', content: prompt }] })
+  })
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById('loadingState').classList.remove('visible');
+    let raw = "";if (data.content && Array.isArray(data.content)) {raw = data.content.filter(b => b.type === "text").map(b => b.text || "").join("");} else if (data.type === "error") {throw new Error(data.error?.message || "API error");}console.log("Raw API response:", raw);
+    raw = raw.replace(/```json|```/g, '').trim();
+    // Keep only the JSON object, in case the model added text before or after it
+    const start = raw.indexOf('{');
+    const end = raw.lastIndexOf('}');
+    if (start !== -1 && end > start) raw = raw.slice(start, end + 1);
+    if (data.stop_reason === 'max_tokens') {
+      console.warn('Response was cut off at max_tokens');
+    }
+    try {
+      analysisResult = JSON.parse(raw);
+      renderAnalysis(analysisResult);
+    } catch(e) {console.error('Parse error:', e, 'Raw was:', raw);
+      document.getElementById('formSection').style.display = 'block';
+      err.textContent = data.stop_reason === 'max_tokens'
+        ? 'The response was cut off before it finished. Try again or shorten the description.'
+        : 'Classification response could not be parsed. Try again. (Details in the browser console.)';
+      err.classList.add('visible');
+    }
+  })
+  .catch((e) => {
+    console.error(e);
+    document.getElementById('loadingState').classList.remove('visible');
+    document.getElementById('formSection').style.display = 'block';
+    err.textContent = (e instanceof TypeError)
+      ? 'Could not reach the server. Make sure server.py is running.'
+      : 'Error: ' + e.message;
+    err.classList.add('visible');
+  });
+}
+
+function renderAnalysis(r) {
+  document.getElementById('memoDate').textContent = new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
+  const badge = document.getElementById('riskBadge');
+  badge.textContent = r.risk_level;
+  badge.className = 'memo-badge ' + (r.risk_level === 'CLEAR' ? 'badge-clear' : r.risk_level === 'REVIEW' ? 'badge-warn' : 'badge-risk');
+  document.getElementById('hsCode').textContent = r.htsus_code || '—';
+  document.getElementById('hsDesc').textContent = r.code_description || '';
+  document.getElementById('rationale').textContent = r.rationale || '';
+
+  if (r.supplier_code_assessment && formData.hsSupplier) {
+    document.getElementById('supplierAssessSection').style.display = 'block';
+    document.getElementById('supplierAssess').textContent = r.supplier_code_assessment;
+  } else {
+    document.getElementById('supplierAssessSection').style.display = 'none';
+  }
+
+  const flagsList = document.getElementById('flagsList');
+  flagsList.innerHTML = '';
+  (r.flags || []).forEach(f => {
+    const div = document.createElement('div');
+    div.className = 'flag flag-' + (f.type === 'warn' ? 'warn' : f.type === 'danger' ? 'danger' : 'ok');
+    const icon = f.type === 'warn' ? 'ti-alert-triangle' : f.type === 'danger' ? 'ti-alert-circle' : 'ti-circle-check';
+    div.innerHTML = '<i class="ti ' + icon + '"></i><span>' + f.text + '</span>';
+    flagsList.appendChild(div);
+  });
+
+  const disqs = r.disambiguation_questions || [];
+  const ds = document.getElementById('disambigSection');
+  if (disqs.length > 0) {
+    ds.style.display = 'block';
+    const dl = document.getElementById('disambigList');
+    dl.innerHTML = '';
+    disqs.forEach(q => {
+      const d = document.createElement('div');
+      d.className = 'disambig-q';
+      d.innerHTML = '<i class="ti ti-help-circle"></i><span>' + q + '</span>';
+      dl.appendChild(d);
+    });
+  } else {
+    ds.style.display = 'none';
+  }
+
+  document.getElementById('precedent').textContent = r.precedent || '';
+  document.getElementById('s1').classList.remove('active');
+  document.getElementById('s1').classList.add('done');
+  document.getElementById('s2').classList.add('done');
+  document.getElementById('s3').classList.add('active');
+  document.getElementById('analysisPanel').classList.add('visible');
+  document.getElementById('analysisPanel').scrollIntoView({behavior:'smooth'});
+}
+
+function exportCSV() {
+  if (!analysisResult) return;
+  const f = formData; const r = analysisResult;
+  const totalVal = (parseFloat(f.unitPrice) * parseInt(f.qty)).toFixed(2);
+  const rows = [
+    ['Field','Value'],
+    ['Supplier',f.supplier],['Country of Origin',f.coo],['Incoterms',f.inco],
+    ['Item Description',f.desc],['Unit Quantity',f.qty],['Net Weight (kg)',f.netWt],
+    ['Gross Weight (kg)',f.grossWt||'N/A'],['Unit Price',f.unitPrice+' '+f.currency],
+    ['Total Declared Value',totalVal+' '+f.currency],['Supplier Suggested HS',f.hsSupplier||'N/A'],
+    ['OriginDocs HTSUS Code',r.htsus_code],['Code Description',r.code_description],
+    ['Risk Level',r.risk_level],['Classification Rationale',r.rationale],
+    ['Regulatory Flags',(r.flags||[]).map(f=>f.text).join(' | ')],
+    ['Supplier Code Assessment',r.supplier_code_assessment||'N/A'],
+    ['CBP Precedent',r.precedent],['Generated',new Date().toISOString()]
+  ];
+  const csv = rows.map(r=>r.map(v=>'"'+(v||'').replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download = 'origindocs_'+Date.now()+'.csv';
+  a.click();
+}
+
+function copyJSON() {
+  if (!analysisResult) return;
+  const payload = {form:formData,analysis:analysisResult,generated:new Date().toISOString()};
+  navigator.clipboard.writeText(JSON.stringify(payload,null,2)).then(()=>{
+    const btn = event.target.closest('button');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="ti ti-check"></i> Copied';
+    setTimeout(()=>{btn.innerHTML=orig;},1500);
+  });
+}
+
+function resetForm() {
+  document.getElementById('formSection').style.display='block';
+  document.getElementById('analysisPanel').classList.remove('visible');
+  ['s1','s2','s3'].forEach(id=>{document.getElementById(id).classList.remove('active','done');});
+  document.getElementById('s1').classList.add('active');
+  document.getElementById('errorMsg').classList.remove('visible');
+  analysisResult=null; formData={}; selectedInco='';
+  document.querySelectorAll('.inco-btn').forEach(b=>b.classList.remove('sel'));
+}
+
+document.getElementById('memoDate').textContent = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+</script>
+</body>
+</html>
